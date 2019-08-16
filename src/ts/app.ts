@@ -1,3 +1,3 @@
 document.addEventListener("DOMContentLoaded", () => {
-	console.log("ok");
+	document.getElementById('ts').className = 'test-ok';
 });
