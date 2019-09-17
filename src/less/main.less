@@ -2,13 +2,24 @@ body {
   max-width: 1000px;
   margin: auto;
 
-  .test-ok {
-    padding: 2px;
-    background: lightgreen;
-    color: black;
-  }
-  .test-bad {
-    padding: 2px;
-    background: pink;
-  }
+}
+
+h1 {
+  display: none
+}
+
+#content {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  grid-template-rows: 20% 80%;
+}
+
+#display {
+  text-align: right;
+  font-size: 3em;
+}
+
+#buttons-box {
+  display: grid;
+  grid-template-columns: 25% 25% 25% 25%;
 }
