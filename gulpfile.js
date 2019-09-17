@@ -1,3 +1,4 @@
+const fs = require("fs");
 const gulp = require("gulp");
 const plug = require("gulp-load-plugins")({
     rename: {
@@ -16,6 +17,7 @@ if (false) {
     plug.ignore = require("gulp-ignore");
     plug.less = require("gulp-less");
     plug.rename = require("gulp-rename");
+    plug.replace = require("gulp-replace");
     plug.sourcemaps = require("gulp-sourcemaps");
     plug.typescript = require("gulp-typescript");
     plug.uglifycss = require("gulp-clean-css");
@@ -50,23 +52,39 @@ gulp.task("ts", ts_task);
 
 //<editor-fold desc="Task HTML">
 const html_task = () => gulp
-   .src("src/html/index.html")
-   .pipe(plug.html(
-      {
-          collapseBooleanAttributes: true,
-          collapseWhitespace: true,
-          decodeEntities: true,
-          removeAttributeQuotes: true,
-          removeComments: true,
-          removeEmptyAttributes: true,
-          removeOptionalTags: true,
-          removeRedundantAttributes: true,
-          removeScriptTypeAttributes: true,
-          removeStyleLinkTypeAttributes: true,
-          sortAttributes: true,
-          sortClassName: true,
-          useShortDoctype: true,
-      }))
+    .src("src/html/index.html")
+    .pipe(plug.html(
+        {
+            collapseBooleanAttributes: true,
+            collapseWhitespace: true,
+            decodeEntities: true,
+            removeAttributeQuotes: true,
+            removeComments: true,
+            removeEmptyAttributes: true,
+            removeOptionalTags: true,
+            removeRedundantAttributes: true,
+            removeScriptTypeAttributes: true,
+            removeStyleLinkTypeAttributes: true,
+            sortAttributes: true,
+            sortClassName: true,
+            useShortDoctype: true,
+        }))
+    .pipe(plug.replace(
+        "<link href=style.min.css rel=stylesheet>",
+        "<style>" +
+        fs.readFileSync("build/style.min.css", "utf8")
+            .replace("/*# sourceMappingURL=style.min.css.map */", "")
+            .trim() +
+        "</style>",
+    ))
+    .pipe(plug.replace(
+        "<script defer src=app.min.js>",
+        "<script defer>" +
+        fs.readFileSync("build/app.min.js", "utf8")
+            .replace("//# sourceMappingURL=app.min.js.map", "")
+            .trim() +
+        "</script>",
+    ))
    .pipe(gulp.dest("build/"));
 gulp.task("html", html_task);
 //</editor-fold>
